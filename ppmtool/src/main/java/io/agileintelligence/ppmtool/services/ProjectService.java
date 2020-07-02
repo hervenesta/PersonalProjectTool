@@ -6,8 +6,6 @@ import io.agileintelligence.ppmtool.repositories.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class ProjectService {
 
@@ -33,5 +31,9 @@ public class ProjectService {
             throw new ProjectIdException("Project ID '"+projectId+"' doesn't exist");
         }
         return project;
+    }
+
+    public Iterable<Project> findAllProjects(){
+        return projectRepository.findAll();
     }
 }
