@@ -34,6 +34,13 @@ public class Project {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
+
+    //when we load a project the backlog is available: FetchType.EAGER
+    //project is the owning side of the relationship ie if we delete a project the backlog will go away not the inverse
+    //project name is the same we're going to give to the project object on the backlog side
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    private Backlog backlog;
+
     public Project() {
 
     }
@@ -100,6 +107,14 @@ public class Project {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
     }
 
     @PrePersist
