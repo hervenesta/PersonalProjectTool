@@ -6,3 +6,4 @@ export default combineReducers({
   errors: errorReducer,
   project: projectReducer
 });
+// this file is the rootReducer
