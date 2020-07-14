@@ -1,6 +1,7 @@
 package io.agileintelligence.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -36,9 +37,10 @@ public class Project {
 
 
     //when we load a project the backlog is available: FetchType.EAGER
-    //project is the owning side of the relationship ie if we delete a project the backlog will go away not the inverse
+    //project is the owning side of the relationship ie if we delete a project the backlog will go away(CASCADE.ALL) not the inverse
     //project name is the same we're going to give to the project object on the backlog side
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    @JsonIgnore // it prevents us from loading all the backlog along with PT when we get Project by id
     private Backlog backlog;
 
     public Project() {

@@ -1,5 +1,7 @@
 package io.agileintelligence.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -10,7 +12,7 @@ public class ProjectTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(updatable = false)
+    @Column(updatable = false, unique = true)
     private String projectSequence;
     @NotBlank(message = "please include a project summary")
     private String summary;
@@ -19,6 +21,11 @@ public class ProjectTask {
     private Integer priority;
     private Date dueDate;
     //Many to One with the backlog
+    //CascadeType.REFRESH WHEN DELETING THE TASK THE BACKLOG REFRESHES
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
+    @JsonIgnore
+    private Backlog backlog;
 
     @Column(updatable = false)
     private String projectIdentifier;
@@ -106,6 +113,14 @@ public class ProjectTask {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
     }
 
     @PrePersist

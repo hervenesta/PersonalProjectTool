@@ -3,6 +3,8 @@ package io.agileintelligence.ppmtool.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Backlog {
@@ -22,7 +24,11 @@ public class Backlog {
 
     //OneToMany with projectTasks
     //a backlog can 1 or more projectTasks but a projectTask belongs to only one backlog
-
+    // CascadeType.all means when we delete a task the backlog goes away
+    //The backlog refreshes but doesn't cascade.all, it just refreshes. That's why when the backlog goes away,
+    //all the child object that are going to be orphan cuz we deleted the project so no backlog, are going to go away as well
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "backlog", orphanRemoval = true)
+    private List<ProjectTask> projectTasks = new ArrayList<>();
     public Backlog() {
     }
 
@@ -56,5 +62,13 @@ public class Backlog {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public List<ProjectTask> getProjectTasks() {
+        return projectTasks;
+    }
+
+    public void setProjectTasks(List<ProjectTask> projectTasks) {
+        this.projectTasks = projectTasks;
     }
 }
